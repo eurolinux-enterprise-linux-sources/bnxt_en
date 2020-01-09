@@ -1,0 +1,4 @@
+%defattr(644,root,root,755)
+/lib/modules/%2-%1
+/etc/depmod.d/bnxt_en.conf
+/usr/share/doc/kmod-bnxt_en/greylist.txt

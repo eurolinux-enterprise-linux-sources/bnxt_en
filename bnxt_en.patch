@@ -1,0 +1,48 @@
+From c9e14a2654f6b4cd65792844c01b2f582d430393 Mon Sep 17 00:00:00 2001
+From: Petr Oros <poros@redhat.com>
+Date: Wed, 27 Jul 2016 17:44:36 +0200
+Subject: [PATCH] Backport bnxt_en for RHEL7.2GA
+
+Signed-off-by: Petr Oros <poros@redhat.com>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c         | 9 +--------
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h | 3 +++
+ 2 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index e6aba37..2a95c32 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -6014,16 +6014,9 @@ static int bnxt_change_mtu(struct net_device *dev, int new_mtu)
+ 	return 0;
+ }
+ 
+-static int bnxt_setup_tc(struct net_device *dev, u32 handle, __be16 proto,
+-			 struct tc_to_netdev *ntc)
++static int bnxt_setup_tc(struct net_device *dev, u8 tc)
+ {
+ 	struct bnxt *bp = netdev_priv(dev);
+-	u8 tc;
+-
+-	if (ntc->type != TC_SETUP_MQPRIO)
+-		return -EINVAL;
+-
+-	tc = ntc->tc;
+ 
+ 	if (tc > bp->max_tc) {
+ 		netdev_err(dev, "too many traffic classes requested: %d Max supported is %d\n",
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h
+index 3abc03b..6af73a1 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h
+@@ -16,4 +16,7 @@ u32 _bnxt_fw_to_ethtool_adv_spds(u16, u8);
+ u32 bnxt_fw_to_ethtool_speed(u16);
+ u16 bnxt_get_fw_auto_link_speeds(u32);
+ 
++#define SPEED_25000		25000
++#define SPEED_50000		50000
++
+ #endif
+-- 
+1.8.3.1
+
